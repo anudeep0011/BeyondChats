@@ -1,0 +1,69 @@
+services:
+  # 1. Laravel Backend
+  - type: web
+    name: beyondchats-backend
+    env: php
+    plan: free
+    region: singapore
+    buildCommand: |
+      cd backend
+      composer install --ignore-platform-reqs --no-scripts
+      cp .env.example .env
+      php artisan key:generate
+      php artisan migrate --force
+      npm install
+      npm run build
+    startCommand: cd backend && php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_DEBUG
+        value: true
+      - key: APP_URL
+        value: https://beyondchats-backend.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: beyondchats-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: beyondchats-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: beyondchats-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: beyondchats-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: beyondchats-db
+          property: password
+
+  # 2. Node.js Processor (Worker)
+  - type: worker
+    name: beyondchats-processor
+    env: node
+    plan: free
+    region: singapore
+    buildCommand: cd processor && npm install
+    startCommand: cd processor && node index.js
+    envVars:
+      - key: API_URL
+        fromService:
+          type: web
+          name: beyondchats-backend
+          property: url
+        value: https://beyondchats-backend.onrender.com/api/articles
+
+databases:
+  - name: beyondchats-db
+    plan: free
+    databaseName: beyondchats
+    user: beyondchats
+
+version: "1"

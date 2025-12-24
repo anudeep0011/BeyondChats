@@ -1,0 +1,32 @@
+/node_modules
+/vendor
+/.idea
+/.vscode
+.DS_Store
+*.log
+.env
+
+# Backend
+backend/vendor
+backend/node_modules
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/testing/*
+backend/storage/framework/views/*
+backend/storage/logs/*
+backend/.env
+backend/.env.backup
+backend/.phpunit.result.cache
+
+# Processor
+processor/node_modules
+processor/.env
+
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/.env
+frontend/.env.local
