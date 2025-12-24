@@ -35,8 +35,8 @@ services:
           name: beyondchats-db
           property: password
 
-  # 2. Node.js Processor (Worker)
-  - type: worker
+  # 2. Node.js Processor (Worker -> Web for Free Tier)
+  - type: web
     name: beyondchats-processor
     env: node
     plan: free
