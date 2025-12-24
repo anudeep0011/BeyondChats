@@ -13,7 +13,7 @@ services:
       php artisan migrate --force
       npm install
       npm run build
-    startCommand: cd backend && php artisan serve --host 0.0.0.0 --port $PORT
+    startCommand: cd backend && php artisan serve --host 0.0.0.0 --port 8080
     envVars:
       - key: APP_KEY
         generateValue: true
@@ -54,11 +54,7 @@ services:
     startCommand: cd processor && node index.js
     envVars:
       - key: API_URL
-        fromService:
-          type: web
-          name: beyondchats-backend
-          property: url
-        value: https://beyondchats-backend.onrender.com/api/articles
+        value: http://beyondchats-backend:8080/api/articles
 
 databases:
   - name: beyondchats-db
